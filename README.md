@@ -15,4 +15,5 @@
 ```bash
 composer install
 
-### ১. **.env ফাইলে API Key সেট করা:**
+২. .env ফাইলে API Key সেট করা:
+এবার OpenAI API Key তোমার .env ফাইলে সেট করতে হবে। তুমি তোমার API Key OpenAI থেকে পেয়ে .env ফাইলে এইভাবে সেট করতে পারো।
