@@ -113,3 +113,87 @@ class AiChat extends Component
 AI (OpenAI) সেই প্রশ্নের উত্তর দিবে real-time
 
 Chat history দেখাবে উপরে সুন্দরভাবে ✅
+
+
+# Laravel AI Chatbot Project (Backend Part)
+app/Services/AIHelper.php ফাইল তৈরি করতে হবে ।
+```
+<?php
+
+namespace App\Services;
+
+use Illuminate\Support\Facades\Http;
+
+class AIHelper
+{
+    protected $apiKey;
+    protected $baseUrl;
+
+    public function __construct()
+    {
+        $this->apiKey = env('OPENAI_API_KEY');
+        $this->baseUrl = 'https://api.openai.com/v1';
+    }
+
+    // 🧠 General Chat (Chatbot এর জন্য)
+    public function chat(string $message)
+    {
+        $response = Http::withToken($this->apiKey)->post("{$this->baseUrl}/chat/completions", [
+            'model' => 'gpt-3.5-turbo',
+            'messages' => [
+                ['role' => 'user', 'content' => $message],
+            ],
+            'temperature' => 0.7,
+        ]);
+
+        return $response['choices'][0]['message']['content'] ?? 'Sorry, কিছু ভুল হয়েছে।';
+    }
+
+    // 🔍 Search Input Embedding (Smart search এর জন্য)
+    public function getEmbedding(string $text)
+    {
+        $response = Http::withToken($this->apiKey)->post("{$this->baseUrl}/embeddings", [
+            'model' => 'text-embedding-ada-002',
+            'input' => $text,
+        ]);
+
+        return $response['data'][0]['embedding'] ?? null;
+    }
+
+    // ✅ Review Sentiment Analysis
+    public function analyzeSentiment(string $text)
+    {
+        $prompt = "এই রিভিউটা positive না negative?: \"$text\"";
+
+        $response = Http::withToken($this->apiKey)->post("{$this->baseUrl}/completions", [
+            'model' => 'text-davinci-003',
+            'prompt' => $prompt,
+            'max_tokens' => 10,
+        ]);
+
+        return strtolower(trim($response['choices'][0]['text']));
+    }
+}
+```
+# Controller
+```
+php artisan make:controller AIController
+```
+# AIController.php
+```
+use App\Services\AIHelper;
+
+public function chat(Request $request, AIHelper $ai)
+{
+    $reply = $ai->chat($request->input('message'));
+    return response()->json(['reply' => $reply]);
+}
+
+public function reviewSentiment(Request $request, AIHelper $ai)
+{
+    $sentiment = $ai->analyzeSentiment($request->input('review'));
+    return response()->json(['sentiment' => $sentiment]);
+}
+
+```
+
