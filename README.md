@@ -14,3 +14,5 @@
 
 ```bash
 composer install
+
+### ১. **.env ফাইলে API Key সেট করা:**
