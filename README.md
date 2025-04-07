@@ -196,4 +196,8 @@ public function reviewSentiment(Request $request, AIHelper $ai)
 }
 
 ```
+# Routes যুক্ত করা (routes/web.php বা api.php)
+```
+Route::post('/ai/chat', [AIController::class, 'chat']);
+Route::post('/ai/review-sentiment', [AIController::class, 'reviewSentiment']);
 
