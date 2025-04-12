@@ -22,7 +22,7 @@ composer install
 OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 ```
-# ৩. Livewire ইন্সটল করা:
+## ৩. Livewire ইন্সটল করা:
 Livewire ইন্সটল করতে নিচের কমান্ড ব্যবহার ।
 ```
 composer require livewire/livewire
